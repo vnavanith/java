@@ -1,953 +1,267 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>ShopEase - E-Commerce Store</title>
-
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
-    body {
-      font-family: Arial, Helvetica, sans-serif;
-      background: #f7f7f8;
-      color: #222;
-    }
-
-    button,
-    input {
-      font: inherit;
-    }
-
-    /* ================= NAVBAR ================= */
-
-    .navbar {
-      height: 70px;
-      background: #fff;
-      border-bottom: 1px solid #eee;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0 6%;
-      position: sticky;
-      top: 0;
-      z-index: 100;
-    }
-
-    .logo {
-      font-size: 25px;
-      font-weight: 800;
-      color: #6c4df6;
-    }
-
-    .nav-links {
-      display: flex;
-      gap: 28px;
-      list-style: none;
-    }
-
-    .nav-links a {
-      text-decoration: none;
-      color: #333;
-      font-size: 15px;
-      transition: 0.2s;
-    }
-
-    .nav-links a:hover {
-      color: #6c4df6;
-    }
-
-    .nav-actions {
-      display: flex;
-      align-items: center;
-      gap: 15px;
-    }
-
-    .search-box {
-      display: flex;
-      align-items: center;
-      background: #f3f3f5;
-      border-radius: 10px;
-      padding: 0 12px;
-    }
-
-    .search-box input {
-      width: 180px;
-      height: 40px;
-      border: none;
-      outline: none;
-      background: transparent;
-    }
-
-    .cart-btn {
-      border: none;
-      background: #6c4df6;
-      color: white;
-      padding: 11px 15px;
-      border-radius: 9px;
-      cursor: pointer;
-      position: relative;
-    }
-
-    .cart-count {
-      position: absolute;
-      top: -8px;
-      right: -8px;
-      width: 20px;
-      height: 20px;
-      background: #ff4757;
-      border-radius: 50%;
-      font-size: 12px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    /* ================= HERO ================= */
-
-    .hero {
-      max-width: 1200px;
-      margin: 30px auto;
-      padding: 70px 60px;
-      border-radius: 25px;
-      color: white;
-      background:
-        linear-gradient(120deg, rgba(71, 47, 170, .95), rgba(108, 77, 246, .75)),
-        url("https://images.unsplash.com/photo-1441986300917-64674bd600d8?auto=format&fit=crop&w=1400&q=80")
-        center/cover;
-      display: flex;
-      align-items: center;
-    }
-
-    .hero-content {
-      max-width: 550px;
-    }
-
-    .hero h1 {
-      font-size: 48px;
-      line-height: 1.1;
-      margin-bottom: 20px;
-    }
-
-    .hero p {
-      font-size: 17px;
-      line-height: 1.6;
-      margin-bottom: 28px;
-      color: #eee;
-    }
-
-    .hero-btn {
-      background: white;
-      color: #5a3ed1;
-      border: none;
-      padding: 14px 24px;
-      border-radius: 10px;
-      font-weight: bold;
-      cursor: pointer;
-    }
-
-    /* ================= CATEGORIES ================= */
-
-    .container {
-      max-width: 1200px;
-      margin: auto;
-      padding: 0 20px;
-    }
-
-    .section-title {
-      margin: 45px 0 20px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    .section-title h2 {
-      font-size: 27px;
-    }
-
-    .categories {
-      display: flex;
-      gap: 12px;
-      flex-wrap: wrap;
-    }
-
-    .category-btn {
-      border: 1px solid #ddd;
-      background: white;
-      padding: 10px 18px;
-      border-radius: 30px;
-      cursor: pointer;
-      transition: .2s;
-    }
-
-    .category-btn:hover,
-    .category-btn.active {
-      background: #6c4df6;
-      color: white;
-      border-color: #6c4df6;
-    }
-
-    /* ================= PRODUCTS ================= */
-
-    .products {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 22px;
-      margin-bottom: 60px;
-    }
-
-    .product-card {
-      background: white;
-      border-radius: 16px;
-      overflow: hidden;
-      border: 1px solid #eee;
-      transition: .25s;
-    }
-
-    .product-card:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 12px 30px rgba(0,0,0,.08);
-    }
-
-    .product-image {
-      height: 230px;
-      width: 100%;
-      object-fit: cover;
-      background: #f3f3f3;
-    }
-
-    .product-info {
-      padding: 16px;
-    }
-
-    .product-category {
-      color: #777;
-      font-size: 12px;
-      text-transform: uppercase;
-      margin-bottom: 7px;
-    }
-
-    .product-name {
-      font-size: 17px;
-      font-weight: 600;
-      margin-bottom: 10px;
-    }
-
-    .rating {
-      color: #ffae00;
-      font-size: 14px;
-      margin-bottom: 12px;
-    }
-
-    .product-bottom {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-
-    .price {
-      font-size: 19px;
-      font-weight: 700;
-    }
-
-    .add-btn {
-      border: none;
-      background: #6c4df6;
-      color: white;
-      padding: 9px 13px;
-      border-radius: 8px;
-      cursor: pointer;
-    }
-
-    .add-btn:hover {
-      background: #5637d3;
-    }
-
-    /* ================= CART ================= */
-
-    .cart-overlay {
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,.4);
-      display: none;
-      z-index: 200;
-    }
-
-    .cart-overlay.show {
-      display: block;
-    }
-
-    .cart-sidebar {
-      position: fixed;
-      right: 0;
-      top: 0;
-      height: 100%;
-      width: 380px;
-      max-width: 90%;
-      background: white;
-      z-index: 201;
-      padding: 25px;
-      transform: translateX(100%);
-      transition: .3s;
-      display: flex;
-      flex-direction: column;
-    }
-
-    .cart-overlay.show .cart-sidebar {
-      transform: translateX(0);
-    }
-
-    .cart-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding-bottom: 20px;
-      border-bottom: 1px solid #eee;
-    }
-
-    .close-cart {
-      border: none;
-      background: #f1f1f1;
-      width: 35px;
-      height: 35px;
-      border-radius: 50%;
-      cursor: pointer;
-    }
-
-    .cart-items {
-      flex: 1;
-      overflow-y: auto;
-      padding: 20px 0;
-    }
-
-    .cart-item {
-      display: flex;
-      gap: 12px;
-      margin-bottom: 18px;
-      padding-bottom: 18px;
-      border-bottom: 1px solid #eee;
-    }
-
-    .cart-item img {
-      width: 70px;
-      height: 70px;
-      object-fit: cover;
-      border-radius: 8px;
-    }
-
-    .cart-item-info {
-      flex: 1;
-    }
-
-    .cart-item-name {
-      font-weight: 600;
-      margin-bottom: 7px;
-    }
-
-    .remove-btn {
-      margin-top: 8px;
-      border: none;
-      background: transparent;
-      color: #ff4757;
-      cursor: pointer;
-      font-size: 13px;
-    }
-
-    .cart-footer {
-      border-top: 1px solid #eee;
-      padding-top: 20px;
-    }
-
-    .cart-total {
-      display: flex;
-      justify-content: space-between;
-      font-size: 20px;
-      font-weight: bold;
-      margin-bottom: 15px;
-    }
-
-    .checkout-btn {
-      width: 100%;
-      border: none;
-      background: #6c4df6;
-      color: white;
-      padding: 14px;
-      border-radius: 10px;
-      cursor: pointer;
-      font-weight: bold;
-    }
-
-    .empty-cart {
-      text-align: center;
-      color: #888;
-      padding-top: 50px;
-    }
-
-    /* ================= FOOTER ================= */
-
-    footer {
-      background: #17151f;
-      color: white;
-      padding: 45px 6%;
-      text-align: center;
-    }
-
-    footer .logo {
-      margin-bottom: 10px;
-      display: block;
-    }
-
-    footer p {
-      color: #aaa;
-      font-size: 14px;
-    }
-
-    /* ================= RESPONSIVE ================= */
-
-    @media (max-width: 1000px) {
-      .products {
-        grid-template-columns: repeat(3, 1fr);
-      }
-
-      .nav-links {
-        display: none;
-      }
-    }
-
-    @media (max-width: 700px) {
-      .navbar {
-        padding: 0 20px;
-      }
-
-      .search-box input {
-        width: 110px;
-      }
-
-      .hero {
-        margin: 20px;
-        padding: 50px 30px;
-      }
-
-      .hero h1 {
-        font-size: 36px;
-      }
-
-      .products {
-        grid-template-columns: repeat(2, 1fr);
-        gap: 12px;
-      }
-
-      .product-image {
-        height: 180px;
-      }
-    }
-
-    @media (max-width: 480px) {
-      .products {
-        grid-template-columns: 1fr;
-      }
-
-      .search-box {
-        display: none;
-      }
-    }
-  </style>
-</head>
-
-<body>
-
-  <!-- NAVBAR -->
-  <nav class="navbar">
-    <div class="logo">ShopEase</div>
-
-    <ul class="nav-links">
-      <li><a href="#">Home</a></li>
-      <li><a href="#products">Shop</a></li>
-      <li><a href="#">Deals</a></li>
-      <li><a href="#">Contact</a></li>
-    </ul>
-
-    <div class="nav-actions">
-      <div class="search-box">
-        🔍
-        <input
-          type="text"
-          id="searchInput"
-          placeholder="Search products..."
+import React from "react";
+
+const products = [
+  {
+    name: "Noir Élan Watch",
+    category: "Timepieces",
+    price: "$4,850",
+    image:
+      "https://images.unsplash.com/photo-1523170335258-f5ed11844a49?auto=format&fit=crop&w=900&q=80",
+  },
+  {
+    name: "Aurelia Leather Bag",
+    category: "Handbags",
+    price: "$2,950",
+    image:
+      "https://images.unsplash.com/photo-1584917865442-de89df76afd3?auto=format&fit=crop&w=900&q=80",
+  },
+  {
+    name: "Maison Noir Fragrance",
+    category: "Fragrance",
+    price: "$420",
+    image:
+      "https://images.unsplash.com/photo-1541643600914-78b084683601?auto=format&fit=crop&w=900&q=80",
+  },
+  {
+    name: "Velour Signature Shoes",
+    category: "Footwear",
+    price: "$1,280",
+    image:
+      "https://images.unsplash.com/photo-1549298916-b41d501d3772?auto=format&fit=crop&w=900&q=80",
+  },
+];
+
+export default function LuxuryStore() {
+  return (
+    <div className="min-h-screen bg-[#0b0b0b] text-white">
+      {/* NAVBAR */}
+      <header className="border-b border-white/10">
+        <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-5">
+          <div className="text-xl tracking-[0.35em] font-light">
+            ÉLÉGANCE
+          </div>
+
+          <nav className="hidden gap-10 text-sm text-white/70 md:flex">
+            <a href="#" className="hover:text-[#d6b56d]">
+              New Arrivals
+            </a>
+            <a href="#" className="hover:text-[#d6b56d]">
+              Collections
+            </a>
+            <a href="#" className="hover:text-[#d6b56d]">
+              Accessories
+            </a>
+            <a href="#" className="hover:text-[#d6b56d]">
+              About
+            </a>
+          </nav>
+
+          <div className="flex gap-5 text-white/70">
+            <button>⌕</button>
+            <button>♡</button>
+            <button>🛍</button>
+          </div>
+        </div>
+      </header>
+
+      {/* HERO */}
+      <section className="relative overflow-hidden">
+        <div
+          className="absolute inset-0 bg-cover bg-center opacity-50"
+          style={{
+            backgroundImage:
+              "url(https://images.unsplash.com/photo-1441986300917-64674bd600d8?auto=format&fit=crop&w=1800&q=80)",
+          }}
         />
-      </div>
 
-      <button class="cart-btn" id="openCart">
-        🛒 Cart
-        <span class="cart-count" id="cartCount">0</span>
-      </button>
-    </div>
-  </nav>
+        <div className="absolute inset-0 bg-gradient-to-r from-black via-black/70 to-transparent" />
 
-  <!-- HERO -->
-  <section class="hero">
-    <div class="hero-content">
-      <h1>Discover Products You'll Love</h1>
+        <div className="relative mx-auto flex min-h-[620px] max-w-7xl items-center px-6">
+          <div className="max-w-xl">
+            <p className="mb-5 text-sm uppercase tracking-[0.4em] text-[#d6b56d]">
+              The Art of Luxury
+            </p>
 
-      <p>
-        Shop the latest trends, electronics, fashion and lifestyle products
-        at amazing prices.
-      </p>
+            <h1 className="font-serif text-6xl leading-tight md:text-8xl">
+              Timeless.
+              <br />
+              <span className="text-[#d6b56d]">Exceptional.</span>
+            </h1>
 
-      <button class="hero-btn" onclick="scrollToProducts()">
-        Shop Now →
-      </button>
-    </div>
-  </section>
+            <p className="mt-7 max-w-md text-lg leading-8 text-white/60">
+              Discover a curated collection of exceptional pieces crafted for
+              those who appreciate the extraordinary.
+            </p>
 
-  <main class="container">
-
-    <!-- CATEGORIES -->
-    <div class="section-title">
-      <h2>Categories</h2>
-    </div>
-
-    <div class="categories">
-      <button class="category-btn active" data-category="all">
-        All
-      </button>
-
-      <button class="category-btn" data-category="electronics">
-        Electronics
-      </button>
-
-      <button class="category-btn" data-category="fashion">
-        Fashion
-      </button>
-
-      <button class="category-btn" data-category="shoes">
-        Shoes
-      </button>
-
-      <button class="category-btn" data-category="accessories">
-        Accessories
-      </button>
-    </div>
-
-    <!-- PRODUCTS -->
-    <div class="section-title" id="products">
-      <h2>Popular Products</h2>
-    </div>
-
-    <div class="products" id="productGrid"></div>
-
-  </main>
-
-  <!-- CART -->
-  <div class="cart-overlay" id="cartOverlay">
-
-    <aside class="cart-sidebar">
-
-      <div class="cart-header">
-        <h2>Your Cart</h2>
-        <button class="close-cart" id="closeCart">✕</button>
-      </div>
-
-      <div class="cart-items" id="cartItems">
-        <div class="empty-cart">
-          Your cart is empty 🛒
+            <button className="mt-9 border border-[#d6b56d] bg-[#d6b56d] px-8 py-4 text-sm uppercase tracking-[0.2em] text-black transition hover:bg-transparent hover:text-[#d6b56d]">
+              Explore Collection
+            </button>
+          </div>
         </div>
-      </div>
+      </section>
 
-      <div class="cart-footer">
-        <div class="cart-total">
-          <span>Total</span>
-          <span id="cartTotal">$0.00</span>
+      {/* FEATURED */}
+      <section className="mx-auto max-w-7xl px-6 py-24">
+        <div className="mb-12 flex items-end justify-between">
+          <div>
+            <p className="mb-3 text-xs uppercase tracking-[0.35em] text-[#d6b56d]">
+              Curated For You
+            </p>
+            <h2 className="font-serif text-4xl md:text-5xl">
+              Featured Collection
+            </h2>
+          </div>
+
+          <button className="hidden border-b border-[#d6b56d] pb-2 text-sm text-[#d6b56d] md:block">
+            View All →
+          </button>
         </div>
 
-        <button class="checkout-btn">
-          Proceed to Checkout
-        </button>
-      </div>
+        {/* PRODUCTS */}
+        <div className="grid gap-7 sm:grid-cols-2 lg:grid-cols-4">
+          {products.map((product) => (
+            <article key={product.name} className="group">
+              <div className="relative aspect-[4/5] overflow-hidden bg-[#151515]">
+                <img
+                  src={product.image}
+                  alt={product.name}
+                  className="h-full w-full object-cover transition duration-700 group-hover:scale-105"
+                />
 
-    </aside>
-  </div>
-
-  <!-- FOOTER -->
-  <footer>
-    <span class="logo">ShopEase</span>
-    <p>© 2026 ShopEase. All rights reserved.</p>
-  </footer>
-
-  <script>
-
-    // ================= PRODUCT DATA =================
-
-    const products = [
-      {
-        id: 1,
-        name: "Wireless Headphones",
-        category: "electronics",
-        price: 79.99,
-        rating: 4.8,
-        image:
-          "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=600&q=80"
-      },
-      {
-        id: 2,
-        name: "Classic Sneakers",
-        category: "shoes",
-        price: 64.99,
-        rating: 4.6,
-        image:
-          "https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=600&q=80"
-      },
-      {
-        id: 3,
-        name: "Minimal Watch",
-        category: "accessories",
-        price: 129.99,
-        rating: 4.9,
-        image:
-          "https://images.unsplash.com/photo-1524805444758-089113d48a6d?auto=format&fit=crop&w=600&q=80"
-      },
-      {
-        id: 4,
-        name: "Denim Jacket",
-        category: "fashion",
-        price: 89.99,
-        rating: 4.5,
-        image:
-          "https://images.unsplash.com/photo-1551028719-00167b16eac5?auto=format&fit=crop&w=600&q=80"
-      },
-      {
-        id: 5,
-        name: "Smartphone",
-        category: "electronics",
-        price: 699.99,
-        rating: 4.9,
-        image:
-          "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?auto=format&fit=crop&w=600&q=80"
-      },
-      {
-        id: 6,
-        name: "Sunglasses",
-        category: "accessories",
-        price: 39.99,
-        rating: 4.4,
-        image:
-          "https://images.unsplash.com/photo-1511499767150-a48a237f0083?auto=format&fit=crop&w=600&q=80"
-      },
-      {
-        id: 7,
-        name: "Running Shoes",
-        category: "shoes",
-        price: 94.99,
-        rating: 4.7,
-        image:
-          "https://images.unsplash.com/photo-1551107696-a4b0c5a0d9a2?auto=format&fit=crop&w=600&q=80"
-      },
-      {
-        id: 8,
-        name: "Cotton T-Shirt",
-        category: "fashion",
-        price: 24.99,
-        rating: 4.3,
-        image:
-          "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?auto=format&fit=crop&w=600&q=80"
-      }
-    ];
-
-
-    // ================= STATE =================
-
-    let cart = [];
-    let currentCategory = "all";
-
-
-    // ================= ELEMENTS =================
-
-    const productGrid = document.getElementById("productGrid");
-    const searchInput = document.getElementById("searchInput");
-    const cartCount = document.getElementById("cartCount");
-    const cartItems = document.getElementById("cartItems");
-    const cartTotal = document.getElementById("cartTotal");
-    const cartOverlay = document.getElementById("cartOverlay");
-
-
-    // ================= DISPLAY PRODUCTS =================
-
-    function displayProducts() {
-
-      const searchTerm = searchInput.value.toLowerCase();
-
-      const filteredProducts = products.filter(product => {
-
-        const matchesCategory =
-          currentCategory === "all" ||
-          product.category === currentCategory;
-
-        const matchesSearch =
-          product.name.toLowerCase().includes(searchTerm);
-
-        return matchesCategory && matchesSearch;
-      });
-
-
-      if (filteredProducts.length === 0) {
-        productGrid.innerHTML = `
-          <p style="grid-column:1/-1;text-align:center;padding:40px">
-            No products found.
-          </p>
-        `;
-
-        return;
-      }
-
-
-      productGrid.innerHTML = filteredProducts.map(product => {
-
-        return `
-          <div class="product-card">
-
-            <img
-              class="product-image"
-              src="${product.image}"
-              alt="${product.name}"
-            />
-
-            <div class="product-info">
-
-              <div class="product-category">
-                ${product.category}
-              </div>
-
-              <div class="product-name">
-                ${product.name}
-              </div>
-
-              <div class="rating">
-                ⭐ ${product.rating}
-              </div>
-
-              <div class="product-bottom">
-
-                <div class="price">
-                  $${product.price.toFixed(2)}
-                </div>
-
-                <button
-                  class="add-btn"
-                  onclick="addToCart(${product.id})"
-                >
-                  Add +
+                <button className="absolute right-4 top-4 flex h-10 w-10 items-center justify-center rounded-full bg-black/60 backdrop-blur hover:text-[#d6b56d]">
+                  ♡
                 </button>
 
+                <button className="absolute bottom-4 left-4 right-4 translate-y-16 bg-[#d6b56d] py-3 text-sm uppercase tracking-widest text-black opacity-0 transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100">
+                  Add to Bag
+                </button>
               </div>
 
+              <div className="pt-5">
+                <p className="text-xs uppercase tracking-widest text-white/40">
+                  {product.category}
+                </p>
+
+                <div className="mt-2 flex items-center justify-between">
+                  <h3 className="font-serif text-xl">{product.name}</h3>
+                  <span className="text-sm text-[#d6b56d]">
+                    {product.price}
+                  </span>
+                </div>
+              </div>
+            </article>
+          ))}
+        </div>
+      </section>
+
+      {/* COLLECTION BANNER */}
+      <section className="mx-auto max-w-7xl px-6 pb-24">
+        <div className="relative overflow-hidden bg-[#17130d]">
+          <div className="grid md:grid-cols-2">
+            <div className="flex items-center p-10 md:p-20">
+              <div>
+                <p className="text-xs uppercase tracking-[0.35em] text-[#d6b56d]">
+                  Private Collection
+                </p>
+
+                <h2 className="mt-5 font-serif text-5xl">
+                  Made for
+                  <br />
+                  <i>the remarkable.</i>
+                </h2>
+
+                <p className="mt-6 max-w-md leading-7 text-white/50">
+                  Rare materials, meticulous craftsmanship and timeless
+                  silhouettes come together in our signature collection.
+                </p>
+
+                <button className="mt-8 border border-white/30 px-7 py-3 text-sm uppercase tracking-widest transition hover:border-[#d6b56d] hover:text-[#d6b56d]">
+                  Discover More
+                </button>
+              </div>
             </div>
-
-          </div>
-        `;
-
-      }).join("");
-    }
-
-
-    // ================= ADD TO CART =================
-
-    function addToCart(productId) {
-
-      const product = products.find(
-        product => product.id === productId
-      );
-
-      const existingProduct = cart.find(
-        item => item.id === productId
-      );
-
-
-      if (existingProduct) {
-        existingProduct.quantity++;
-      } else {
-        cart.push({
-          ...product,
-          quantity: 1
-        });
-      }
-
-
-      updateCart();
-
-      // Open cart after adding
-      cartOverlay.classList.add("show");
-    }
-
-
-    // ================= REMOVE FROM CART =================
-
-    function removeFromCart(productId) {
-
-      cart = cart.filter(
-        item => item.id !== productId
-      );
-
-      updateCart();
-    }
-
-
-    // ================= UPDATE CART =================
-
-    function updateCart() {
-
-      const totalItems = cart.reduce(
-        (total, item) => total + item.quantity,
-        0
-      );
-
-      cartCount.textContent = totalItems;
-
-
-      if (cart.length === 0) {
-
-        cartItems.innerHTML = `
-          <div class="empty-cart">
-            Your cart is empty 🛒
-          </div>
-        `;
-
-        cartTotal.textContent = "$0.00";
-
-        return;
-      }
-
-
-      cartItems.innerHTML = cart.map(item => {
-
-        return `
-          <div class="cart-item">
 
             <img
-              src="${item.image}"
-              alt="${item.name}"
+              src="https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?auto=format&fit=crop&w=1200&q=80"
+              alt="Luxury collection"
+              className="h-[500px] w-full object-cover"
             />
-
-            <div class="cart-item-info">
-
-              <div class="cart-item-name">
-                ${item.name}
-              </div>
-
-              <div>
-                $${item.price.toFixed(2)}
-                × ${item.quantity}
-              </div>
-
-              <button
-                class="remove-btn"
-                onclick="removeFromCart(${item.id})"
-              >
-                Remove
-              </button>
-
-            </div>
-
           </div>
-        `;
+        </div>
+      </section>
 
-      }).join("");
+      {/* NEWSLETTER */}
+      <section className="border-y border-white/10 py-20 text-center">
+        <p className="text-xs uppercase tracking-[0.4em] text-[#d6b56d]">
+          Private Access
+        </p>
 
+        <h2 className="mt-4 font-serif text-4xl">
+          Enter the world of Élégance
+        </h2>
 
-      const total = cart.reduce(
-        (sum, item) =>
-          sum + item.price * item.quantity,
-        0
-      );
+        <p className="mx-auto mt-4 max-w-lg text-white/50">
+          Receive invitations to private collections, exclusive releases and
+          exceptional experiences.
+        </p>
 
-      cartTotal.textContent =
-        `$${total.toFixed(2)}`;
-    }
+        <div className="mx-auto mt-8 flex max-w-md border-b border-white/30">
+          <input
+            type="email"
+            placeholder="Your email address"
+            className="flex-1 bg-transparent px-2 py-4 outline-none placeholder:text-white/30"
+          />
 
+          <button className="px-4 text-sm uppercase tracking-widest text-[#d6b56d]">
+            Join
+          </button>
+        </div>
+      </section>
 
-    // ================= CATEGORY FILTER =================
+      {/* FOOTER */}
+      <footer className="mx-auto max-w-7xl px-6 py-12">
+        <div className="grid gap-10 md:grid-cols-4">
+          <div>
+            <div className="text-lg tracking-[0.3em]">ÉLÉGANCE</div>
+            <p className="mt-4 text-sm leading-6 text-white/40">
+              A destination for timeless luxury and exceptional craftsmanship.
+            </p>
+          </div>
 
-    document
-      .querySelectorAll(".category-btn")
-      .forEach(button => {
+          <div>
+            <h4 className="text-sm uppercase tracking-widest">Shop</h4>
+            <div className="mt-5 space-y-3 text-sm text-white/40">
+              <p>New Arrivals</p>
+              <p>Watches</p>
+              <p>Handbags</p>
+              <p>Fragrance</p>
+            </div>
+          </div>
 
-        button.addEventListener("click", () => {
+          <div>
+            <h4 className="text-sm uppercase tracking-widest">Client Care</h4>
+            <div className="mt-5 space-y-3 text-sm text-white/40">
+              <p>Contact</p>
+              <p>Shipping & Returns</p>
+              <p>Size Guide</p>
+              <p>Appointments</p>
+            </div>
+          </div>
 
-          document
-            .querySelectorAll(".category-btn")
-            .forEach(btn =>
-              btn.classList.remove("active")
-            );
+          <div>
+            <h4 className="text-sm uppercase tracking-widest">Follow</h4>
+            <div className="mt-5 space-y-3 text-sm text-white/40">
+              <p>Instagram</p>
+              <p>Pinterest</p>
+              <p>Facebook</p>
+            </div>
+          </div>
+        </div>
 
-          button.classList.add("active");
-
-          currentCategory =
-            button.dataset.category;
-
-          displayProducts();
-        });
-
-      });
-
-
-    // ================= SEARCH =================
-
-    searchInput.addEventListener(
-      "input",
-      displayProducts
-    );
-
-
-    // ================= CART OPEN/CLOSE =================
-
-    document
-      .getElementById("openCart")
-      .addEventListener("click", () => {
-
-        cartOverlay.classList.add("show");
-
-      });
-
-
-    document
-      .getElementById("closeCart")
-      .addEventListener("click", () => {
-
-        cartOverlay.classList.remove("show");
-
-      });
-
-
-    cartOverlay.addEventListener("click", event => {
-
-      if (event.target === cartOverlay) {
-        cartOverlay.classList.remove("show");
-      }
-
-    });
-
-
-    // ================= HERO BUTTON =================
-
-    function scrollToProducts() {
-
-      document
-        .getElementById("products")
-        .scrollIntoView({
-          behavior: "smooth"
-        });
-
-    }
-
-
-    // ================= INITIALIZE =================
-
-    displayProducts();
-
-  </script>
-
-</body>
-</html>
+        <div className="mt-12 border-t border-white/10 pt-6 text-xs text-white/30">
+          © 2026 ÉLÉGANCE. All rights reserved.
+        </div>
+      </footer>
+    </div>
+  );
+}
